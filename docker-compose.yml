@@ -52,6 +52,8 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   react:
     driver: ${VOLUMES_DRIVER}
+  xhgui:
+    driver: ${VOLUMES_DRIVER}
 
 services:
 
@@ -2122,6 +2124,25 @@ services:
         - KEYCLOAK_DATABASE_PASSWORD=${KEYCLOAK_POSTGRES_PASSWORD}
       depends_on:
         - postgres
+      networks:
+        - frontend
+        - backend
+
+  ### XHGUI Server #########################################
+    xhgui:
+      build:
+        context: ./xhgui
+      environment:
+        - XHGUI_MONGO_HOST=${XHGUI_MONGO_HOST}
+        - MONGO_PORT=${MONGODB_PORT}
+        - PHP_WEBSERVER_PORT=80
+      ports:
+        - ${XHGUI_PORTAL_PORT}:80
+      volumes:
+        - xhgui:/usr/local/src
+      depends_on:
+        - php-fpm
+        - mongo
       networks:
         - frontend
         - backend
