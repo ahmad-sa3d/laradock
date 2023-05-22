@@ -2,6 +2,6 @@ FROM quay.io/soketi/soketi:latest
 
 LABEL maintainer="WuweiMing <wwm041544363@gmail.com>"
 
-CMD ["node /app/bin/server.js start"]
+ENTRYPOINT ["node", "/app/bin/server.js", "start", "--config=/app/config/soketi.json"]
 
 EXPOSE 6001 9601
