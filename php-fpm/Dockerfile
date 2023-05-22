@@ -1290,6 +1290,25 @@ RUN if [ ${INSTALL_DNSUTILS} = true ]; then \
 ;fi
 
 ###########################################################################
+# Snowflake PDO extension for PHP:
+###########################################################################
+USER root
+
+ARG INSTALL_SNOWFLAKE=false
+
+RUN if [ ${INSTALL_SNOWFLAKE} = true ]; then \
+apt-get -yqq install cmake && \
+export PHP_HOME=/usr/local && \
+cd /tmp && \
+git clone https://github.com/snowflakedb/pdo_snowflake.git && \
+/tmp/pdo_snowflake/scripts/build_pdo_snowflake.sh && \
+cp /tmp/pdo_snowflake/.libs/pdo_snowflake.so $(php-config --extension-dir) && \
+cp /tmp/pdo_snowflake/libsnowflakeclient/cacert.pem /usr/local/etc/php/conf.d \
+;fi
+
+COPY ./pdo_snowflake.ini /usr/local/etc/php/conf.d
+
+###########################################################################
 # Check PHP version:
 ###########################################################################
 
